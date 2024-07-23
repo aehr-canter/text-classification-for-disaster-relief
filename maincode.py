@@ -1,5 +1,5 @@
 import pandas as pd
-import collections=
+import collections
 
 #Load datasets
 train_haiti = pd.read_csv('haiti_train.csv')
