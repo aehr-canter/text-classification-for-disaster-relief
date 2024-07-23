@@ -11,3 +11,4 @@ words = texts.split()
 word_counts = collections.Counter(words)
 top_words = word_counts.most_common(30)
 print(top_words)
+# this is project
