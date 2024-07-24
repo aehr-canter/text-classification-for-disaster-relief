@@ -6,6 +6,11 @@ import pandas as pd
 import collections
 import numpy as np
 import csv
+import nltk
+from nltk.corpus import stopwords
+import matplotlib.pyplot as plt
+import sklearn
+from sklearn.feature_extraction.text import CountVectorizer
 
 #Load datasets
 train_haiti = pd.read_csv('haiti_train.csv')
