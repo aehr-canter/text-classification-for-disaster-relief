@@ -4,14 +4,12 @@
 
 import pandas as pd
 import collections
+import numpy as np
+import csv
 
 #Load datasets
 train_haiti = pd.read_csv('haiti_train.csv')
 train_sandy = pd.read_csv('sandy_train.csv')
-
-#countWordFreq
-texts = train_haiti['Text'].str.cat(sep=' ')
-words = texts.split()
-word_counts = collections.Counter(words)
-top_words = word_counts.most_common(30)
-print(top_words)
+# convert the 'Text' column into lists of tweets
+tweets_haiti = train_haiti['Text'].tolist()
+tweets_sandy = train_sandy['Text'].tolist()
