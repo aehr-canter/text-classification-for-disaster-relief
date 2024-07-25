@@ -2,7 +2,7 @@
 #functions for fitting logistic regression, KNN, decision trees, etc.
 #evaluation metrics like accuracy, precision recall
 
-from file1 import tweets_haiti
+from file1 import tweets_haiti, tweets_sandy
 import nltk
 import pandas as pd
 import collections
@@ -33,6 +33,9 @@ keywords = {
     "Medical": ["medical", "health", "medicine", "doctor", "hospital", "clinic", "treatment", "virus"]
 }
 
+
+
+#preprocessing function using spaCy
 def preprocess_text_spacy(tweet):
     tweet = tweet.lower()
     tweet = re.sub(r'\W', ' ', tweet)
@@ -41,41 +44,23 @@ def preprocess_text_spacy(tweet):
     tokens = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
     return ' '.join(tokens)
 
+#preprocess haiti dataset
 tweets_haiti_preprocessed = [preprocess_text_spacy(tweet) for tweet in tweets_haiti]
 
+#label assignment function
 def assign_label(words, keywords):
     for label, kw_list in keywords.items():
         if any(word in words for word in kw_list):
             return label
     return "NaN"
 
-labelsResults = [assign_label(words, keywords) for words in tweets_haiti_preprocessed]
-print(labelsResults)
+#assign labels to haiti dataset
+labelsResults_haiti = [assign_label(words, keywords) for words in tweets_haiti_preprocessed]
+print('Labels for Haiti Dataset: ', labelsResults_haiti)
 
+#Preprocess sandy dataset
+tweets_sandy_preprocessed = [preprocess_text_spacy(tweet) for tweet in tweets_sandy]
 
-#     count = 0
-#     # Iterate over each tweet in the Haiti dataset
-#     for tweet in tweets_haiti:
-#         # Convert tweet to lowercase
-#         tweet.lower()
-#         # Split the tweet into individual words
-#         words = tweet.split()
-        
-#         # Assign labels based on keywords found in the tweet
-#         if "food" in words:
-#             labelsResults[count] = "Food"
-#         elif "water" in words:
-#             labelsResults[count] = "Water"
-#         elif "energy" in words:
-#             labelsResults[count] = "Energy"
-#         elif "medical" in words:
-#             labelsResults[count] = "Medical"
-
-#         # Increment the count to move to the next label
-#         count+=1
-#         # Print the final list of labels for the Haiti tweets
-#         print(labelsResults)
-#         #checking if it worked for each tweet (total 1601)
-#         print(len(labelsResults))
-
-# #assign_label()
+#assign labels to sandy dataset
+labelsResults_sandy = [assign_label(words, keywords) for words in tweets_sandy_preprocessed]
+print('\nLabels for Sandy Dataset: ', labelsResults_sandy)
