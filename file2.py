@@ -17,10 +17,10 @@ from nltk.stem import SnowballStemmer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
+import spacy
 
-# nltk.download()
-# nltk.download('stopwords')
-# nltk.download('punkt')
+nlp = spacy.load('en_core_web_sm')
+
 
 
 # initialize a list to store labels, with "NaN" as the default value
@@ -33,18 +33,15 @@ keywords = {
     "Medical": ["medical", "health", "medicine", "doctor", "hospital", "clinic", "treatment", "virus"]
 }
 
-def preprocess_text(tweet):
+def preprocess_text_spacy(tweet):
     tweet = tweet.lower()
     tweet = re.sub(r'\W', ' ', tweet)
     tweet = re.sub(r'\d+','', tweet)
-    tokens = word_tokenize(tweet)
-    stop_words = set(stopwords.words('english'))
-    tokens = [word for word in tokens if word.lower() not in stop_words]
-    stemmer = PorterStemmer()
-    tokens = [stemmer.stem(word) for word in tokens]
+    doc = nlp(tweet)
+    tokens = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
     return ' '.join(tokens)
 
-tweets_haiti_preprocessed = [preprocess_text(tweet) for tweet in tweets_haiti]
+tweets_haiti_preprocessed = [preprocess_text_spacy(tweet) for tweet in tweets_haiti]
 
 def assign_label(words, keywords):
     for label, kw_list in keywords.items():
