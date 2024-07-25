@@ -18,6 +18,8 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 import spacy
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import f1_score, accuracy_score
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -25,7 +27,7 @@ nlp = spacy.load('en_core_web_sm')
 
 # initialize a list to store labels, with "NaN" as the default value
 #labelsResults = ["NaN"] * len(tweets_haiti)
-
+#Bag of Words Model
 keywords = {
     "Food": ["food", "hunger", "meal", "groceries", "nutrition", "eat", "hungry", "meals", "feed", "dish"],
     "Water": ["water", "thirst", "thirsty", "hydration", "drink"],
@@ -64,3 +66,26 @@ tweets_sandy_preprocessed = [preprocess_text_spacy(tweet) for tweet in tweets_sa
 #assign labels to sandy dataset
 labelsResults_sandy = [assign_label(words, keywords) for words in tweets_sandy_preprocessed]
 print('\nLabels for Sandy Dataset: ', labelsResults_sandy)
+
+
+
+#Naive Bayes Classifier
+def naive_bayes_classifier(train_texts, train_labels, test_texts, test_labels):
+    # Vectorize the text data
+    vectorizer = CountVectorizer()
+    X_train = vectorizer.fit_transform(train_texts)
+    X_test = vectorizer.transform(test_texts)
+    nb_classifier = MultinomialNB()
+    nb_classifier.fit(X_train, train_labels)
+    predicted_labels = nb_classifier.predict(X_test)
+    accuracy = accuracy_score(test_labels, predicted_labels)
+    f1 = f1_score(test_labels, predicted_labels, average='weighted')
+    print(f"Accuracy: {accuracy}")
+    print(f"F1 Score: {f1}")
+
+train_texts = tweets_haiti_preprocessed
+train_labels = labelsResults_haiti
+test_texts = tweets_sandy_preprocessed
+test_labels = labelsResults_sandy
+
+naive_bayes_classifier(train_texts, train_labels, test_texts, test_labels)

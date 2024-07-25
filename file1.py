@@ -16,6 +16,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 #Load datasets
 train_haiti = pd.read_csv('haiti_train.csv')
 train_sandy = pd.read_csv('sandy_train.csv')
+test_haiti = pd.read_csv('haiti_test.csv')
+test_sandy = pd.read_csv('sandy_test.csv')
+
 # convert the 'Text' column into lists of tweets
 tweets_haiti = train_haiti['Text'].tolist()
 tweets_sandy = train_sandy['Text'].tolist()
