@@ -27,7 +27,7 @@ nlp = spacy.load('en_core_web_sm')
 
 # initialize a list to store labels, with "NaN" as the default value
 #labelsResults = ["NaN"] * len(tweets_haiti)
-#Bag of Words Model
+#Bag of Words
 keywords = {
     "Food": ["food", "hunger", "meal", "groceries", "nutrition", "eat", "hungry", "meals", "feed", "dish"],
     "Water": ["water", "thirst", "thirsty", "hydration", "drink"],
@@ -89,3 +89,44 @@ test_texts = tweets_sandy_preprocessed
 test_labels = labelsResults_sandy
 
 naive_bayes_classifier(train_texts, train_labels, test_texts, test_labels)
+
+
+
+
+#Logistic Regression
+from sklearn.linear_model import LogisticRegression
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support, classification_report, ConfusionMatrixDisplay
+
+def evaluate_logistic_regression(train_texts, train_labels, test_texts, test_labels):
+    # Use TF-IDF Vectorizer with n-grams
+    vectorizer = TfidfVectorizer(ngram_range=(1, 2))  # Using unigrams and bigrams
+    X_train = vectorizer.fit_transform(train_texts)
+    X_test = vectorizer.transform(test_texts)
+
+    # Logistic Regression Model
+    lr_model = LogisticRegression(max_iter=1000)
+    lr_model.fit(X_train, train_labels)
+
+    # Predictions
+    predicted_labels = lr_model.predict(X_test)
+    
+    # Evaluation Metrics
+    accuracy = accuracy_score(test_labels, predicted_labels)
+    precision, recall, f1, _ = precision_recall_fscore_support(test_labels, predicted_labels, average='weighted')
+    print(f"Logistic Regression - Accuracy: {accuracy}")
+    print(f"Precision: {precision}, Recall: {recall}, F1 Score: {f1}")
+    print(classification_report(test_labels, predicted_labels))
+    
+    # Confusion Matrix
+    ConfusionMatrixDisplay.from_estimator(lr_model, X_test, test_labels)
+    plt.title('Confusion Matrix for Logistic Regression')
+    plt.show()
+
+# Example usage
+train_texts = tweets_haiti_preprocessed
+train_labels = labelsResults_haiti
+test_texts = tweets_sandy_preprocessed
+test_labels = labelsResults_sandy
+
+evaluate_logistic_regression(train_texts, train_labels, test_texts, test_labels)
