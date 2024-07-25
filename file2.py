@@ -3,8 +3,25 @@
 #evaluation metrics like accuracy, precision recall
 
 from file1 import tweets_haiti
+import nltk
+import pandas as pd
+import collections
+import numpy as np
+import csv
+from nltk.corpus import stopwords
+import matplotlib.pyplot as plt
+import sklearn
+from sklearn.feature_extraction.text import CountVectorizer
 import re
 from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+
+# nltk.download()
+# nltk.download('stopwords')
+# nltk.download('punkt')
+
 
 # initialize a list to store labels, with "NaN" as the default value
 #labelsResults = ["NaN"] * len(tweets_haiti)
@@ -19,8 +36,13 @@ keywords = {
 def preprocess_text(tweet):
     tweet = tweet.lower()
     tweet = re.sub(r'\W', ' ', tweet)
-    words = tweet.split()
-    return words
+    tweet = re.sub(r'\d+','', tweet)
+    tokens = word_tokenize(tweet)
+    stop_words = set(stopwords.words('english'))
+    tokens = [word for word in tokens if word.lower() not in stop_words]
+    stemmer = PorterStemmer()
+    tokens = [stemmer.stem(word) for word in tokens]
+    return ' '.join(tokens)
 
 tweets_haiti_preprocessed = [preprocess_text(tweet) for tweet in tweets_haiti]
 
@@ -32,6 +54,7 @@ def assign_label(words, keywords):
 
 labelsResults = [assign_label(words, keywords) for words in tweets_haiti_preprocessed]
 print(labelsResults)
+
 
 #     count = 0
 #     # Iterate over each tweet in the Haiti dataset
