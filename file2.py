@@ -27,10 +27,10 @@ nlp = spacy.load('en_core_web_sm')
 #labelsResults = ["NaN"] * len(tweets_haiti)
 
 keywords = {
-    "Food": ["food", "hunger", "meal", "groceries", "nutrition", "eat", "hungry", "meals"],
+    "Food": ["food", "hunger", "meal", "groceries", "nutrition", "eat", "hungry", "meals", "feed", "dish"],
     "Water": ["water", "thirst", "thirsty", "hydration", "drink"],
-    "Energy": ["energy", "power", "electricity", "fuel", "gas", "battery", "heat"],
-    "Medical": ["medical", "health", "medicine", "doctor", "hospital", "clinic", "treatment", "virus"]
+    "Energy": ["energy", "power", "electricity", "fuel", "gas", "battery", "heat", "lights", "light", "batteries"],
+    "Medical": ["medical", "health", "medicine", "doctor", "hospital", "clinic", "treatment", "virus", "painkiller", "painkillers", "generator", ]
 }
 
 
