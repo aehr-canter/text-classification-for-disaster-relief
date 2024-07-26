@@ -3,6 +3,7 @@
 #evaluation metrics like accuracy, precision recall
 
 from file1 import tweets_haiti, tweets_sandy
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import nltk
 import pandas as pd
 import collections
@@ -82,6 +83,11 @@ def naive_bayes_classifier(train_texts, train_labels, test_texts, test_labels):
     f1 = f1_score(test_labels, predicted_labels, average='weighted')
     print(f"Accuracy: {accuracy}")
     print(f"F1 Score: {f1}")
+
+    cm = confusion_matrix(test_labels, predicted_labels)
+    ConfusionMatrixDisplay(cm, display_labels=nb_classifier.classes_).plot()
+    plt.title('Confusion Matrix for Naive Bayes')
+    plt.show()
 
 train_texts = tweets_haiti_preprocessed
 train_labels = labelsResults_haiti
